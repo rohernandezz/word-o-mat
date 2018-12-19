@@ -384,8 +384,7 @@ class WordomatWindow:
                     if self.f.has_key(c):
                         g = self.f[c]
                         try:
-                            value = unichr(int(g.unicode))
-                            print(value)
+                            value = unicode(unichr(int(g.unicode)))
                             result2.append(value)
                         except TypeError: # unicode not set
                             message ("word-o-mat: Glyph \"%s\" was found, but does not appear to have a Unicode value set. It can therefore not be processed, and will be skipped." % c)
@@ -395,10 +394,7 @@ class WordomatWindow:
                         message ("word-o-mat: Sorry, matching by glyph name is only supported when a font is open. Character \"%s\" will be skipped." % c)
             else: # character values
                 result2.append(c)
-        
-        #Not sure if the function can simply return result2 or if the conditional is there to guard against returning None?
-        result = [s for s in result2 if s]
-
+        result = [unicode(s) for s in result2 if s]
         return result
 
 
