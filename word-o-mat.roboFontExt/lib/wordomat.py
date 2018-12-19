@@ -3,7 +3,6 @@
 """
 word-o-mat is a RoboFont extension that generates test words for type testing, sketching etc.
 I assume no responsibility for inappropriate words found on those lists and rendered by this script :)
-
 v2.2.4 / Nina Stössinger / 31.05.2015
 Thanks to Just van Rossum, Frederik Berlaen, Tobias Frere-Jones, Joancarles Casasín, James Edmondson
 Also to Roberto Arista, Sindre Bremnes, Mathieu Christe/David Hodgetts for help with wordlists
@@ -12,8 +11,6 @@ Also to Roberto Arista, Sindre Bremnes, Mathieu Christe/David Hodgetts for help 
 import codecs
 import re
 import webbrowser
-
-from fontTools.misc.py23 import unichr
 
 from lib.UI.noneTypeColorWell import NoneTypeColorWell
 from lib.UI.spaceCenter.glyphSequenceEditText import GlyphSequenceEditText
@@ -114,7 +111,7 @@ class WordomatWindow:
         self.g1.colorWell.set(None)
 
         # populate from prefs
-        if self.reqMarkColor is not "None": # initial pref
+        if self.reqMarkColor is not "None": # initial pref
             try:
                 r, g, b, a = self.reqMarkColor
                 savedColor = NSColor.colorWithCalibratedRed_green_blue_alpha_(r, g, b, a)
@@ -280,7 +277,7 @@ class WordomatWindow:
 
     def loadREReference(self, sender):
         """Loads the RE syntax reference in a webbrowser."""
-        url = "https://docs.python.org/2/library/re.html#regular-expression-syntax"
+        url = "https://docs.python.org/3.6/library/re.html#regular-expression-syntax"
         webbrowser.open(url, new=2, autoraise=True)
 
     def readExtDefaultBoolean(self, string):
@@ -358,7 +355,7 @@ class WordomatWindow:
         for g in font:
             if g.unicode is not None:
                 try:
-                    charset.append(unichr(int(g.unicode)))
+                    charset.append(chr(int(g.unicode)))
                     gnames.append(g.name)
                 except ValueError:
                     pass
@@ -384,7 +381,7 @@ class WordomatWindow:
                     if self.f.has_key(c):
                         g = self.f[c]
                         try:
-                            value = unicode(unichr(int(g.unicode)))
+                            value = chr(int(g.unicode))
                             result2.append(value)
                         except TypeError: # unicode not set
                             message ("word-o-mat: Glyph \"%s\" was found, but does not appear to have a Unicode value set. It can therefore not be processed, and will be skipped." % c)
@@ -394,7 +391,7 @@ class WordomatWindow:
                         message ("word-o-mat: Sorry, matching by glyph name is only supported when a font is open. Character \"%s\" will be skipped." % c)
             else: # character values
                 result2.append(c)
-        result = [unicode(s) for s in result2 if s]
+        result = [s for s in result2 if s]
         return result
 
 
@@ -441,7 +438,6 @@ class WordomatWindow:
 
     def checkReqVsCase(self, required, case):
         """Check that required letters do not contradict case selection.
-
         This seems to be a frequent source of user error.
         Only implemented for text mode (character list), not grep.
         """
@@ -561,7 +557,6 @@ class WordomatWindow:
 
     def makeWords(self, sender=None):
         """Parse user input, save new values to prefs, compile and display the resulting words.
-
         I think this function is too long and bloated, it should be taken apart. ########
         """
 
@@ -596,7 +591,7 @@ class WordomatWindow:
                     for gname in self.f.selection:
                         if self.f[gname].unicode is not None:
                             try:
-                                self.customCharset.append(unichr(int(self.f[gname].unicode)))
+                                self.customCharset.append(chr(int(self.f[gname].unicode)))
                             except ValueError:
                                 pass
                 except AttributeError:
@@ -615,7 +610,7 @@ class WordomatWindow:
             for g in self.f:
                 if g.mark == self.reqMarkColor:
                     try:
-                        self.customCharset.append(unichr(int(g.unicode)))
+                        self.customCharset.append(chr(int(g.unicode)))
                     except:
                         pass
             if len(self.customCharset) == 0:
@@ -623,7 +618,7 @@ class WordomatWindow:
                 self.g1.base.set(1) # use font chars
                 self.toggleColorSwatch(0)
 
-        self.matchMode = "text" if self.g2.matchMode.get() == 0 else "grep" # braucht es diese zeile noch?
+        self.matchMode = "text" if self.g2.matchMode.get() == 0 else "grep" # braucht es diese zeile noch?
 
         self.requiredLetters = self.getInputString(self.g2.textMode.mustLettersBox, False)
         self.requiredGroups[0] = self.getInputString(self.g2.textMode.group1box, True)
